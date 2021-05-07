@@ -1,0 +1,23 @@
+:name: AES Test Demo
+:description: This script exercises the custom VexRiscv AES instructions
+
+$name?="litex-vexriscv"
+$bios?=@https://dl.antmicro.com/projects/renode/bios.bin-s_27076-9b28166a445deb24d5d3547871ae0de8365ba4d0
+$micropython?=@https://dl.antmicro.com/projects/renode/litex_vexriscv-micropython.bin-s_218608-db594ec6a9a75d77d2475afd714b6c28fb6e6498
+
+using sysbus
+mach create $name
+
+machine LoadPlatformDescription @platforms/cpus/litex_vexriscv_linux.repl
+
+showAnalyzer uart
+
+macro reset
+"""
+    sysbus LoadBinary $bios 0x0
+    cpu PC 0x0
+"""
+runMacro $reset
+
+
+#sysbus.cpu InstallCustomInstructionHandlerFromString "1011001110001111" "cpu.DebugLog('custom instruction executed!')"

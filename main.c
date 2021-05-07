@@ -1359,7 +1359,7 @@ u32 decrypt_last_ref[4][256] = {
 
 #define encrypt_test(id)      \
 {     \
-    bsp_putString("E\n")     \
+    bsp_putString("E\n");     \
     u32 dut = 0, ref = 0;     \
     for(u32 byte = 0;byte < 256;byte++){     \
         u32 tmp = byte << (id*8);     \
@@ -1374,7 +1374,7 @@ u32 decrypt_last_ref[4][256] = {
 
 #define encrypt_last_test(id)      \
 {     \
-    bsp_putString("EL\n")     \
+    bsp_putString("EL\n");    \
     u32 dut = 0, ref = 0;     \
     for(u32 byte = 0;byte < 256;byte++){     \
         u32 tmp = byte << (id*8);     \
@@ -1389,7 +1389,7 @@ u32 decrypt_last_ref[4][256] = {
 
 #define decrypt_test(id)      \
 {     \
-    bsp_putString("D\n")     \
+    bsp_putString("D\n");     \
     u32 dut = 0, ref = 0;     \
     for(u32 byte = 0;byte < 256;byte++){     \
         u32 tmp = byte << (id*8);     \
@@ -1404,7 +1404,7 @@ u32 decrypt_last_ref[4][256] = {
 
 #define decrypt_last_test(id)      \
 {     \
-    bsp_putString("DL\n")     \
+    bsp_putString("DL\n");     \
     u32 dut = 0, ref = 0;     \
     for(u32 byte = 0;byte < 256;byte++){     \
         u32 tmp = byte << (id*8);     \
@@ -1421,9 +1421,11 @@ unsigned char in[16] __attribute__((aligned(4)));
 unsigned char out[16] __attribute__((aligned(4)));
 unsigned int rk[60];
 
-void main(void) {
-    bsp_init();
+void isr(void) {
+	;
+}
 
+static void run_tests(void) {
     encrypt_test(0);
     encrypt_test(1);
     encrypt_test(2);
@@ -1444,20 +1446,20 @@ void main(void) {
     decrypt_last_test(1);
     decrypt_last_test(2);
     decrypt_last_test(3);
+}
 
+int main(void) {
+    bsp_init();
 
+	run_tests();
 
-    bsp_putString("perf\n")
+    bsp_putString("perf\n");
 
     for(int i = 0;i < 10;i++){
         vexriscv_aes_encrypt(in, out, rk, 14);
     }
 
-    bsp_putString("DONE\n")
+    bsp_putString("DONE\n");
 
-}
-
-__attribute__((noreturn)) void _start(void) {
-	main();
 	while (1) {}
 }

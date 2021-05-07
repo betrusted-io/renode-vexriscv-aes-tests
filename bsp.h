@@ -18,9 +18,13 @@
 #define BSP_LED_GPIO SYSTEM_GPIO_A_APB
 #define BSP_LED_MASK 0x01
 
+void udelay(int usec);
+void _putchar(char character);
+int printf_(const char* format, ...);
+
 #define bsp_init() {}
-#define bsp_putChar(c) //uart_write(BSP_UART_TERMINAL, c);
-#define bsp_uDelay(usec) //machineTimer_uDelay(usec, SYSTEM_MACHINE_TIMER_HZ, SYSTEM_MACHINE_TIMER_APB);
-#define bsp_putString(s) //uart_writeStr(BSP_UART_TERMINAL, s);
+#define bsp_putChar(c) _putchar(c)
+#define bsp_uDelay(usec) udelay(usec)
+#define bsp_putString(s) printf_("%s", s)
 
 #endif /* BSP_H__ */

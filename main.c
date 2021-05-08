@@ -5321,7 +5321,7 @@ int main(void)
 	bsp_init();
 	printf("Hello, AES Test!\n");
 
-	// run_tests();
+	run_tests();
 
 	printf("perf\n");
 

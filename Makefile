@@ -1,5 +1,5 @@
 CROSS_COMPILE ?= riscv64-unknown-elf-
-CFLAGS		:= -D__vexriscv__ -march=rv32imac  -mabi=ilp32 \
+CFLAGS		:= -D__vexriscv__ -march=rv32ima  -mabi=ilp32 \
 				-Wall -Wextra \
 				-flto \
 				-ggdb3 \

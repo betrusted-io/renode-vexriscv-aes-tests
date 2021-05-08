@@ -1,19 +1,18 @@
 :name: AES Test Demo
 :description: This script exercises the custom VexRiscv AES instructions
 
-# Add this script's path to the global path, so
-# we can include files relative to ourselves.
-path add $ORIGIN
 
 $name?="vexriscv-aes-test"
 $bios?=@main.elf
+
+mach clear
+mach rem $name
 
 using sysbus
 mach create $name
 
 machine LoadPlatformDescription @platforms/cpus/litex_vexriscv_linux.repl
 machine StartGdbServer 3333 true
-#showAnalyzer uart
 
 macro reset
 """
@@ -37,10 +36,11 @@ runMacro $reset
 # aes_dec_round:      ssss001 bbbbb aaaaa 000 ddddd 0001011
 # aes_dec_round_last: ssss011 bbbbb aaaaa 000 ddddd 0001011
 
+i @vexriscv-aes.py
+# sysbus.cpu InstallCustomInstructionHandlerFromString "ssss000bbbbbaaaaa000ddddd0001011" "print('Local variables: '); print(dir()); print('CPU variables: '); print(dir(cpu)); print('Instruction variables: '); print(dir(instruction))"
+sysbus.cpu InstallCustomInstructionHandlerFromFile "00ss0fdbbbbbaaaaa000ddddd0001011" @vexriscv-aes.py
+#sysbus.cpu InstallCustomInstructionHandlerFromString "ssss010bbbbbaaaaa000ddddd0001011" "cpu.DebugLog('aes_enc_round_last')"
+#sysbus.cpu InstallCustomInstructionHandlerFromString "ssss001bbbbbaaaaa000ddddd0001011" "cpu.DebugLog('aes_dec_round')"
+#sysbus.cpu InstallCustomInstructionHandlerFromString "ssss011bbbbbaaaaa000ddddd0001011" "cpu.DebugLog('aes_dec_round_last')"
 
-sysbus.cpu InstallCustomInstructionHandlerFromString "ssss000bbbbbaaaaa000ddddd0001011" "cpu.DebugLog('aes_enc_round')"
-sysbus.cpu InstallCustomInstructionHandlerFromString "ssss010bbbbbaaaaa000ddddd0001011" "cpu.DebugLog('aes_enc_round_last')"
-sysbus.cpu InstallCustomInstructionHandlerFromString "ssss001bbbbbaaaaa000ddddd0001011" "cpu.DebugLog('aes_dec_round')"
-sysbus.cpu InstallCustomInstructionHandlerFromString "ssss011bbbbbaaaaa000ddddd0001011" "cpu.DebugLog('aes_dec_round_last')"
-
-i @recreate.resc
+showAnalyzer uart

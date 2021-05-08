@@ -27,9 +27,9 @@ static inline __attribute__((always_inline)) void vexriscv_aes_store_unaligned(u
     ptr[3] = value >> 24;
 }
 
-static inline __attribute__((always_inline)) void vexriscv_aes_encrypt(unsigned char *in,
+static inline __attribute__((always_inline)) void vexriscv_aes_encrypt(const unsigned char *in,
                           unsigned char *out,
-                          unsigned int *rk,
+                          const unsigned int *rk,
                           int round_count) {
     unsigned int s0, s1, s2, s3, t0, t1, t2, t3;
     round_count >>= 1;

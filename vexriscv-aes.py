@@ -1154,5 +1154,7 @@ def handle_aes(opcode):
 # '__subclasshook__', 'machine']
 
 
-if not 'Renode' in globals():
-    handle_aes(instruction)
+#if not 'Renode' in globals():
+#    handle_aes(instruction)
+if 'instruction' in globals():
+        handle_aes(instruction)

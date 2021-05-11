@@ -9,6 +9,19 @@
 #define aes_dec_round(rs1, rs2, sel) opcode_R(CUSTOM0, 0x00, (sel << 3) | 1, rs1, rs2)
 #define aes_dec_round_last(rs1, rs2, sel) opcode_R(CUSTOM0, 0x00, (sel << 3) | 2 | 1, rs1, rs2)
 
+void *
+memcpy (void *dest, const void *src, size_t len)
+{
+  char *d = dest;
+  const char *s = src;
+  while (len--)
+    *d++ = *s++;
+  return dest;
+}
+
+#define __bswap_32(x) \
+  ((((x) & 0xff000000u) >> 24) | (((x) & 0x00ff0000u) >> 8) \
+   | (((x) & 0x0000ff00u) << 8) | (((x) & 0x000000ffu) << 24))
 
 static void vexriscv_aes_swap_key(unsigned int *key){
     for(int i = 0;i < 60;i++){
@@ -27,9 +40,9 @@ static inline __attribute__((always_inline)) void vexriscv_aes_store_unaligned(u
     ptr[3] = value >> 24;
 }
 
-static inline __attribute__((always_inline)) void vexriscv_aes_encrypt(const unsigned char *in,
+static inline __attribute__((always_inline)) void vexriscv_aes_encrypt(unsigned char *in,
                           unsigned char *out,
-                          const unsigned int *rk,
+                          unsigned int *rk,
                           int round_count) {
     unsigned int s0, s1, s2, s3, t0, t1, t2, t3;
     round_count >>= 1;
@@ -276,5 +289,4 @@ static inline __attribute__((always_inline)) void vexriscv_aes_decrypt(unsigned 
         vexriscv_aes_store_unaligned(out + 12, s3);
     }
 }
-
 #endif /* AES_CUSTOM_H__ */
